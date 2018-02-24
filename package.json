@@ -1,0 +1,16 @@
+{
+  "name": "bmxugdemo-container",
+  "private": true,
+  "version": "0.0.1",
+  "description": "demo for BMXUG冬の大勉強会2017",
+  "author": "phssakaiawa <sakaigawa@pumpkinheads.jp>",
+  "dependencies": {
+    "express": "3.4.8",
+    "mocha": "*",
+    "should": "*",
+    "nconf":  "*",
+    "validator": "*",
+    "jquery":"*",
+    "request-json":"*"
+  }
+}
