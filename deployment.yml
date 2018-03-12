@@ -16,15 +16,15 @@ spec:
         #imagePullPolicy: Never        
         ports:
         - containerPort: 80
-        ## Watson Visual Recognition‚ÌƒT[ƒrƒX•R•t‚¯ƒTƒ“ƒvƒ‹‚Å‚·B
-        ## Visual RecognitionƒT[ƒrƒX‚ğƒfƒvƒƒC‚µ‚ÄService Binding Secret Name‚ğ’u‚«Š·‚¦‚Ä‚­‚¾‚³‚¢B
+        ## Watson Visual Recognitionã®ã‚µãƒ¼ãƒ“ã‚¹ç´ä»˜ã‘ã‚µãƒ³ãƒ—ãƒ«ã§ã™ã€‚
+        ## Visual Recognitionã‚µãƒ¼ãƒ“ã‚¹ã‚’ãƒ‡ãƒ—ãƒ­ã‚¤ã—ã¦Service Binding Secret Nameã‚’ç½®ãæ›ãˆã¦ãã ã•ã„ã€‚
         env:
         - name: WATSON_VR
           valueFrom:
            secretKeyRef:
            # name: {ServiceBinding Secret name}
-           name: binding-watson-vr-gb
-           key: binding
+             name: binding-watson-vr-gb
+             key: binding
 ---
 apiVersion: v1
 kind: Service
