@@ -49,7 +49,7 @@ if($_FILES['upfile']['tmp_name']):
 ?>
 判定結果：
 <hr>
-<img src="<?php echo($a); ?>"/>
+<img src="<?php echo($a); ?>" width="500px" />
 <?php
     $watson_json_env = getenv('WATSON_VR');
     $watson_json_decoded = json_decode($watson_json_env,true);
