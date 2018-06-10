@@ -14,93 +14,77 @@
 	$watson_json_decoded = json_decode($watson_json_env,true);
 	if($watson_json_env==false){
 		echo("ERROR: SERVICE BINDが定義されていません。Watson Visual Recognitionへ接続できません。");
+		exit();
 	};
 	
 	
 ?>
 
-<input id="fileupload" type="file" name="files[]" data-url="./" multiple>
-<span class="btn btn-success fileinput-button">
-        <i class="glyphicon glyphicon-plus"></i>
-        <span>Select files...</span>
-        <!-- The file input field used as target for the file upload widget -->
-        <input id="fileupload" type="file" name="files[]" multiple>
-    </span>
-<br>
-<br>
-<!-- The global progress bar -->
-<div id="progress" class="progress">
-    <div class="progress-bar progress-bar-success"></div>
-</div>
 <?php
+$msg = null;
 
-	var_dump($_FILES);
-    //一字ファイルができているか（アップロードされているか）チェック
-    if(is_uploaded_file($_FILES['up_file']['tmp_name'])){
+if(isset($_FILES['upfile']) && is_uploaded_file($_FILES['upfile']['tmp_name'])){
+	if(!file_exists('upload')){
+		mkdir('upload');
+		chmod('upload',0777);
+	}
+	$new_name = date("YmdHis");
+	$a = 'upload/'.basename($_FILES['upfile']['name'].$new_name);
+	
+	if(move_uploaded_file($_FILES['upfile']['tmp_name'], $a)){
+		$msg = $a. "のアップロードに成功しました";
+	}else{
+		$msg = "アップロードに失敗しました。";
+	}
+}
+?>
+<h3>Watson Visual Recognitionで画像分析</h3>
+<form action="./" method="post" enctype="multipart/form-data">
+<input type="file" name="upfile">
+<input type="submit" value="送信" name="upload">
+</form>
 
-        //一字ファイルを保存ファイルにコピーできたか
-        if(move_uploaded_file($_FILES['up_file']['tmp_name'],"./".$_FILES['up_file']['name'])){
-
-            //正常
-            echo "uploaded";
-
-        }else{
-
-            //コピーに失敗（だいたい、ディレクトリがないか、パーミッションエラー）
-            echo "error while saving.";
-        }
-
-    }else{
-
-        //そもそもファイルが来ていない。
-        echo "file not uploaded.";
-
-    }
-    ?>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="js/vendor/jquery.ui.widget.js"></script>
-<script src="js/jquery.iframe-transport.js"></script>
-<script src="js/jquery.fileupload.js"></script>
-<link rel="stylesheet" href="css/jquery.fileupload.css" />
-<script>
-    $(function () {
-        'use strict';
-
-        var url = "./";
-        $('#fileupload').fileupload({
-            url: url,
-            dataType: 'json',
-            done: function (e, data) {
-                $.each(data.result.files, function (index, file) {
-                    $('<p/>').text(file.name).appendTo('#files');
-                });
-            },
-            progressall: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $('#progress .progress-bar').css(
-                        'width',
-                        progress + '%'
-                );
-            },
-            add: function(e, data){
-               var uploadErrors = [];
-               var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i; //content type
-               if(data.files[0]['type'].length && !acceptFileTypes.test(data.files[0]['type'])) {
-                   uploadErrors.push('Not an accepted file type');
-               }
-               if(data.files[0]['size'].length && data.files[0]['size'] > 5000000) {
-                   uploadErrors.push('Filesize is too big');
-               }
-               if(uploadErrors.length > 0) {
-                   alert(uploadErrors.join("\n"));
-               } else {
-                   data.submit();
-               }
-           },
-        
-        }).prop('disabled', !$.support.fileInput)
-                .parent().addClass($.support.fileInput ? undefined : 'disabled');
-    });
-</script>
+<?php
+if($_FILES['upfile']['tmp_name']):
+?>
+判定結果：
+<hr>
+<img src="<?php echo($a); ?>"/>
+<?php
+    $watson_json_env = getenv('WATSON_VR');
+    $watson_json_decoded = json_decode($watson_json_env,true);
+    $url=$watson_json_decoded["url"]."/v3/classify?api_key=".$watson_json_decoded["api_key"]."&version=2016-05-17";
+    $curl = curl_init();
+   
+    $jpg = $a;
+ 
+    $data = array("images_file" => new CURLFile($jpg,mime_content_type($jpg),basename($jpg)));
+    curl_setopt($curl,CURLOPT_HEADER,0);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POST, TRUE);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+    
+    $response=curl_exec($curl);
+    $info=curl_getinfo($curl);
+    curl_close($curl);
+    $vr_array=json_decode($response,true);
+if($response):
+?>
+<table border=1>
+<?php
+foreach ($vr_array['images'][0]['classifiers'][0]['classes'] as $record) {
+  foreach ($record as $key => $value) {
+    print "<tr><td>$key</td><td>$value</td></tr>";
+  }
+  print "<tr><td colspan=\"2\">&nbsp;</td></tr>";
+}
+endif;
+?>
+</table>
+<?php
+endif;
+?>
 </body> 
 </html>
