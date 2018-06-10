@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>jQuery File Upload Example</title>
+<title>thinkjapan Developer day LT demo</title>
 </head>
 <body>
-<h1>コンテナ・ベース・オーケストレーション</h1>
-<h2>Kubernetes on IBM Cloud Container Service</h2>
+<h1>Think Japan Developer Day / Developer Night </h1>
+<h2>use case IBM Cloud Kubernetes Service + DevOps DEMO</h2>
 <hr>
 <br>
 <?php
