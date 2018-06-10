@@ -1,16 +1,16 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: ch07-app
+  name: tjdev-lt-k8s-app
 spec:
   replicas: 2
   template:
     metadata:
       labels:
-        app: ch07-app
+        app: tjdev-lt-k8s-app
     spec:
       containers:
-      - name: ch07-app
+      - name: tjdev-lt-k8s-app
         image: webapp:1
         # for local development against minikube registry
         #imagePullPolicy: Never        
@@ -39,4 +39,4 @@ spec:
     - port: 80
   # label keys and values that must match in order to receive traffic for this service
   selector:
-    app: ch07-app
+    app: tjdev-lt-k8s-app
