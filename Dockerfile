@@ -24,7 +24,7 @@ RUN yum -y localinstall http://ftp.iij.ad.jp/pub/linux/fedora/epel/epel-release-
 RUN yum -y localinstall http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 
 #yumによるphp7.0インストール
-RUN yum install -y --enablerepo=remi --enablerepo=remi-php70 php php-common php-mbstring php-gd php-xml php-xmlrpc php-devel php-cli php-pdo php-mysql php-odbc php-pear php-mcrypt php-pecl-apc
+RUN yum install -y --enablerepo=remi --enablerepo=remi-php70 php php-common php-mbstring php-gd php-xml php-xmlrpc php-devel php-cli php-pdo php-pgsql php-mysql php-odbc php-pear php-mcrypt php-pecl-apc
 
 #tmpディレクトリに移動
 WORKDIR /tmp/
