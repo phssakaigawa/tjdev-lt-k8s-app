@@ -29,9 +29,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ch07-service
+  name: tjdev-lt-k8s-service
   labels:
-    app: ch07-service
+    app: tjdev-lt-k8s-service
 spec:
   type: NodePort
   ports:
