@@ -18,13 +18,13 @@ spec:
         - containerPort: 80
         ## Watson Visual Recognitionのサービス紐付けサンプルです。
         ## Visual RecognitionサービスをデプロイしてService Binding Secret Nameを置き換えてください。
-        #env:
-        #- name: WATSON_VR
-        #  valueFrom:
-        #   secretKeyRef:
-        #   # name: {ServiceBinding Secret name}
-        #     name: binding-watson-vr-gb
-        #     key: binding
+        env:
+        - name: WATSON_VR
+          valueFrom:
+           secretKeyRef:
+           # name: {ServiceBinding Secret name}
+             name: binding-watson-vr-gb
+             key: binding
 ---
 apiVersion: v1
 kind: Service
